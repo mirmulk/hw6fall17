@@ -10,7 +10,8 @@ describe MoviesController do
       post :search_tmdb, {:search_terms => 'Ted'}
     end
     it 'should select the Search Results template for rendering' do
-      allow(Movie).to receive(:find_in_tmdb)
+      fake_results = [double('Movie'), double('Movie')]
+      allow(Movie).to receive(:find_in_tmdb).and_return (fake_results)
       post :search_tmdb, {:search_terms => 'Ted'}
       expect(response).to render_template('search_tmdb')
     end  
@@ -19,6 +20,16 @@ describe MoviesController do
       allow(Movie).to receive(:find_in_tmdb).and_return (fake_results)
       post :search_tmdb, {:search_terms => 'Ted'}
       expect(assigns(:movies)).to eq(fake_results)
-    end 
+    end
+    it 'should flash error message if no movies match search' do
+      fake_results = []
+      allow(Movie).to receive(:find_in_tmdb).and_return (fake_results)
+      post :search_tmdb, {:search_terms => 'el cucuy vs the notorious'}
+      expect(flash[:warning]).to eq("No matching movies were found on TMDb")
+    end
+    it 'should flash error message if search bar is blank' do
+      post :search_tmdb, {:search_terms => ''}
+      expect(flash[:warning]).to eq("Invalid search term")
+    end
   end
 end

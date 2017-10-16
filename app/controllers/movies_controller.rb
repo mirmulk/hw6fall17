@@ -62,7 +62,16 @@ class MoviesController < ApplicationController
   end
   
   def search_tmdb
-    @movies=Movie.find_in_tmdb(params[:search_terms])
+    @preSearch = params[:search_terms]
+    if @preSearch.empty? || @preSearch.nil?
+      flash[:warning] = "Invalid search term"
+      redirect_to movies_path
+    else
+      @movies=Movie.find_in_tmdb(@preSearch)
+      if @movies.empty?
+        flash[:warning] = "No matching movies were found on TMDb"
+        redirect_to movies_path
+      end
+    end
   end
-
 end
