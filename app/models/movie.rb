@@ -30,4 +30,6 @@ class Movie < ActiveRecord::Base
     end
    return array_hashes
   end
+  def self.add_from_tmdb(id)
+  end
 end

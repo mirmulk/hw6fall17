@@ -1,5 +1,5 @@
 %h1 The following movies containing #{@search} were found on TMDb
-= form_tag movies_search_tmdb_path, :method => :post, :id => 'add_selected_movies' do
+= form_tag movies_add_tmdb_path, :method => :post, :id => 'add_selected_movies' do
   %table#movies
     %thead
       %tr
