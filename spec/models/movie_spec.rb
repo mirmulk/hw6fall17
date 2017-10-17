@@ -1,3 +1,5 @@
+require 'spec_helper'
+require 'rails_helper'
 
 describe Movie do
   describe 'searching Tmdb by keyword' do
@@ -5,6 +7,12 @@ describe Movie do
       it 'should call Tmdb with title keywords' do
         expect( Tmdb::Movie).to receive(:find).with('Inception')
         Movie.find_in_tmdb('Inception')
+      end
+      it 'should return empty when nonexistent movie search' do
+        expect(Movie.find_in_tmdb('el cucuy vs the notorious mystic mac')).to be_empty
+      end
+      it 'should return array with movie when existent movie search_tmdb' do
+        expect(Movie.find_in_tmdb('Interstellar')).not_to be_empty
       end
     end
     context 'with invalid key' do
